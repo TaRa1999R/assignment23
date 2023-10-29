@@ -50,7 +50,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
         self.label.setSizePolicy(sizePolicy)
         font = QFont()
-        font.setPointSize(13)
+        font.setPointSize(20)
         font.setBold(True)
         self.label.setFont(font)
         self.label.setStyleSheet(u"color: rgb(255, 85, 127);\n"

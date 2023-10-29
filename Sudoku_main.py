@@ -19,6 +19,8 @@ class Mainwindow ( QMainWindow ) :
         self.new_game ()
         self.ui.menue_new.triggered.connect (self.new_game)
         self.ui.menue_file.triggered.connect (self.open_file)
+        self.ui.menue_rule.triggered.connect (self.rules)
+        self.ui.menue_option.triggered.connect (self.options)
     
     
     def new_game ( self ) :
@@ -59,6 +61,22 @@ class Mainwindow ( QMainWindow ) :
                 
                 else :
                     self.cells[i][j].setText ("")
+
+
+    def rules ( self ) :
+        text = "What are the 3 rules of Sudoku?🤔\n\nThe rules for sudoku are simple :\n\
+    1. Each 3×3 block can only contain numbers from 1 to 9.\n    2.Each vertical column can only contain numbers from 1 to 9.\n\
+    3.Each horizontal row can only contain numbers from 1 to 9.\n\n\
+tip :Each number in the 3×3 block, vertical column or horizontal row can be used only once🤐😅\n\n I hope you enjoy my game"
+        message = QMessageBox (windowTitle = "Sudoku Ruls 📜" , text = text)
+        message.exec_ ()
+
+
+    def options ( self ) : 
+        text = "✔ You can change the difficulty of the game.\n\n✔ You can solve your own Sudoku by writing its numbers in a text file a use \
+'Open File' section in 'Game' menue.\nnote : You must write '0' instead of empty blocks😉"
+        message = QMessageBox (windowTitle = "Options ..." , text = text)
+        message.exec_ ()
 
 
     def validation ( self , i , j , text) : 

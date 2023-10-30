@@ -67,18 +67,18 @@ class Mainwindow ( QMainWindow ) :
 
 
     def rules ( self ) :
-        text = "What are the 3 rules of Sudoku?🤔\n\nThe rules for sudoku are simple :\n\
+        txt = "What are the 3 rules of Sudoku?🤔\n\nThe rules for sudoku are simple :\n\
     1. Each 3*3 block can only contain numbers from 1 to 9.\n    2.Each vertical column can only contain numbers from 1 to 9.\n\
     3.Each horizontal row can only contain numbers from 1 to 9.\n\n\
 tip :Each number in the 3*3 block, vertical column or horizontal row can be used only once🤐😅\n\n I hope you enjoy my game"
-        message = QMessageBox (windowTitle = "Sudoku Ruls 📜" , text = text)
+        message = QMessageBox (windowTitle = "Sudoku Ruls 📜" , text = txt)
         message.exec_ ()
 
 
     def options ( self ) : 
-        text = "✔ You can solve your own Sudoku by writing its numbers in a text file a use \
+        txt = "✔ You can solve your own Sudoku by writing its numbers in a text file a use \
 'Open File' section in 'Game' menue.\nnote : You must write '0' instead of empty blocks😉"
-        message = QMessageBox (windowTitle = "Options ..." , text = text)
+        message = QMessageBox (windowTitle = "Options ..." , text = txt)
         message.exec_ ()
 
 
@@ -92,58 +92,81 @@ tip :Each number in the 3*3 block, vertical column or horizontal row can be used
 
 
     def check ( self , i , j , text) :
+        state = 0
+
         # CHECK  IN A ROW
-        for colomn in range (9) :
-            if colomn != j :
-                if text == self.cells[i][colomn].text() :
-                    self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
-                    self.mistake += 1
-                    self.ui.mistakes.setText (str (self.mistake))
-                    break
+        if state == 0 :
+         for colomn in range (9) :
+                if colomn != j :
+                    if text == self.cells[i][colomn].text() :
+                        self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
+                        self.mistake += 1
+                        self.ui.mistakes.setText (str (self.mistake))
+                        break
                 
-                else :
-                    pass
+                    else :
+                        state = 1
         
         # CHECK IN A COLOMN
-        for row in range (9) :
-            if row != i :
-                if text == self.cells[row][j].text() :
-                    self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
-                    self.mistake += 1
-                    self.ui.mistakes.setText (str (self.mistake))
-                    break
+        if state == 1 :
+            for row in range (9) :
+                if row != i :
+                    if text == self.cells[row][j].text() :
+                        self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
+                        self.mistake += 1
+                        self.ui.mistakes.setText (str (self.mistake))
+                        break
+
+                    else :
+                        state = 2
 
         # CHECK IN 3*3 BLOCK
-        if i % 3 == 0 :
-            rows = [i + 1 , i + 2]
+        if state == 2 :
+            if i % 3 == 0 :
+                rows = [i + 1 , i + 2]
         
-        elif i % 3 == 1 :
-            rows = [i - 1 , i + 1]
+            elif i % 3 == 1 :
+                rows = [i - 1 , i + 1]
         
-        else :
-            rows = [i - 2 , i - 1]
+            else :
+                rows = [i - 2 , i - 1]
         
-        if j % 3 == 0 :
-            colomns = [j + 1 , j + 2]
+            if j % 3 == 0 :
+                colomns = [j + 1 , j + 2]
         
-        elif j % 3 == 1 :
-            colomns = [j - 1 , j + 1]
+            elif j % 3 == 1 :
+                colomns = [j - 1 , j + 1]
         
-        else :
-            colomns = [j - 2 , j - 1]
+            else :
+                colomns = [j - 2 , j - 1]
         
-        for row in rows :
-            for colomn in colomns :
-                if text == self.cells[row][colomn].text() :
-                    self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
-                    self.mistake += 1
-                    self.ui.mistakes.setText (str (self.mistake))
-                    break
+            for row in rows :
+                for colomn in colomns :
+                    if text == self.cells[row][colomn].text() :
+                        self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
+                        self.mistake += 1
+                        self.ui.mistakes.setText (str (self.mistake))
+                        break
         
-        # CHECK FULL GAME
+        # CHECK WIN
+        check = 0
         for row in range (9) :
-            
-
+            for colomn in range (9) :
+                if self.cells[row][colomn].text() != ""  and self.mistake < 3 :
+                    check += 1
+        
+        if check == 81 :
+            txt = "🎉🎉 You WIN 🎉🎉"
+            message = QMessageBox (windowTitle = "Congratulation... 🥳" , text = txt)
+            message.exec_ ()
+            self.new_game ()
+        
+        # CHECK LOOS
+        if self.mistake == 3 :
+            txt = "💀💀 You LOOSE 💀💀"
+            message = QMessageBox (windowTitle = "Congratulation... 🥴" , text = txt)
+            message.exec_ ()
+            self.new_game ()
 
 
 if __name__ == "__main__" :

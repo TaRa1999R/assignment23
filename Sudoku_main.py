@@ -84,9 +84,7 @@ Untill then you cant do another sudoku puzzle.😇😕⏳"
         txt = "What are the 3 rules of Sudoku?🤔\n\nThe rules for sudoku are simple :\n\
     1. Each 3*3 block can only contain numbers from 1 to 9.\n    2.Each vertical column can only contain numbers from 1 to 9.\n\
     3.Each horizontal row can only contain numbers from 1 to 9.\n\n\
-tip :Each number in the 3*3 block, vertical column or horizontal row can be used only once🤐😅\nnote: In your own\
- sudoku puzzle (when you upload file) you can make 5️ mistakes, while in computer puzzles you can only make 3️ mistakes.\
-\n\nI hope you enjoy my game.🤭"
+tip :Each number in the 3*3 block, vertical column or horizontal row can be used only once🤐😅\n\nI hope you enjoy my game.🤭"
         message = QMessageBox (windowTitle = "Sudoku Ruls 📜" , text = txt)
         message.exec_ ()
 
@@ -145,7 +143,6 @@ is 'Dark Mode' , but you can also turn it off and put the game in 'Light Mode'."
                             self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
                             self.mistake += 1
                             self.ui.mistakes.setText (str (self.mistake))
-                            print("ro", self.mistake)
                             break
                         
                 else :
@@ -159,7 +156,6 @@ is 'Dark Mode' , but you can also turn it off and put the game in 'Light Mode'."
                             self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
                             self.mistake += 1
                             self.ui.mistakes.setText (str (self.mistake))
-                            print("col", self.mistake)
                             break
 
                 else :
@@ -191,29 +187,9 @@ is 'Dark Mode' , but you can also turn it off and put the game in 'Light Mode'."
                             self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
                             self.mistake += 1
                             self.ui.mistakes.setText (str (self.mistake))
-                            print("bl", self.mistake)
                             break
         
-            # CHECK WIN
-            check = 0
-            for row in range (9) :
-                for colomn in range (9) :
-                    if self.cells[row][colomn].text() != ""  and self.mistake < 5 :
-                        check += 1
-
-            if check == 81 :
-                txt = "🎉🎉 You WIN 🎉🎉"
-                message = QMessageBox (windowTitle = "Congratulation... 🥳" , text = txt)
-                message.exec_ ()
-                self.new_game ()
-        
-            # CHECK LOOS
-            if self.mistake == 5 :
-                txt = "💀💀 You LOOSE 💀💀"
-                message = QMessageBox (windowTitle = "Congratulation... 🥴" , text = txt)
-                message.exec_ ()
-                self.new_game ()
-        
+        # CHECK CPU MODE
         elif self.mode == "CPU" :
             if text != str (self.solution.board[i][j]) :
                 self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
@@ -223,24 +199,25 @@ is 'Dark Mode' , but you can also turn it off and put the game in 'Light Mode'."
             else :
                 self.cells[i][j].setReadOnly (True)
 
-            for i in range (9) :
-                for j in range (9) :
-                    if self.cells[i][j].text() != str (self.solution.board[i][j]) :
-                        break
+        # CHECK WIN
+            check = 0
+            for row in range (9) :
+                for colomn in range (9) :
+                    if self.cells[row][colomn].text() != ""  and self.mistake < 3 :
+                        check += 1
 
-                else :
-                    txt = "🎉🎉 You WIN 🎉🎉"
-                    message = QMessageBox (windowTitle = "Congratulation... 🥳" , text = txt)
-                    message.exec_ ()
-                    self.new_game ()
-            
-            if self.mistake == 3 :
-                txt = "💀💀 You LOOSE 💀💀"
-                message = QMessageBox (windowTitle = "Congratulation... 🥴" , text = txt)
+            if check == 81 :
+                txt = "🎉🎉 You WIN 🎉🎉"
+                message = QMessageBox (windowTitle = "Congratulation... 🥳" , text = txt)
                 message.exec_ ()
                 self.new_game ()
 
-
+        # cHECK LOOSE    
+        if self.mistake == 3 :
+            txt = "💀💀 You LOOSE 💀💀"
+            message = QMessageBox (windowTitle = "Congratulation... 🥴" , text = txt)
+            message.exec_ ()
+            self.new_game ()
 
 
 if __name__ == "__main__" :

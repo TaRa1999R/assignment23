@@ -50,7 +50,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
         self.label.setSizePolicy(sizePolicy)
         font = QFont()
-        font.setPointSize(20)
+        font.setPointSize(13)
         font.setBold(True)
         self.label.setFont(font)
         self.label.setStyleSheet(u"color: rgb(255, 85, 127);\n"
@@ -121,7 +121,6 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuabout.menuAction())
         self.menuGame.addAction(self.menue_new)
         self.menuGame.addAction(self.menue_file)
-        self.menuGame.addAction(self.menue_difficulty)
         self.menuabout.addAction(self.menue_rule)
         self.menuabout.addAction(self.menue_option)
 

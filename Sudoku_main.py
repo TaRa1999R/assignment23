@@ -14,7 +14,10 @@ class Mainwindow ( QMainWindow ) :
         super().__init__ ()
         self.ui = Ui_MainWindow ()
         self.ui.setupUi (self)
+
         self.cells = [[None for i in range (9)] for j in range (9)]
+        self.score = 0
+        self.mistake = 0
         
         self.new_game ()
         self.ui.menue_new.triggered.connect (self.new_game)
@@ -65,15 +68,15 @@ class Mainwindow ( QMainWindow ) :
 
     def rules ( self ) :
         text = "What are the 3 rules of Sudoku?🤔\n\nThe rules for sudoku are simple :\n\
-    1. Each 3×3 block can only contain numbers from 1 to 9.\n    2.Each vertical column can only contain numbers from 1 to 9.\n\
+    1. Each 3*3 block can only contain numbers from 1 to 9.\n    2.Each vertical column can only contain numbers from 1 to 9.\n\
     3.Each horizontal row can only contain numbers from 1 to 9.\n\n\
-tip :Each number in the 3×3 block, vertical column or horizontal row can be used only once🤐😅\n\n I hope you enjoy my game"
+tip :Each number in the 3*3 block, vertical column or horizontal row can be used only once🤐😅\n\n I hope you enjoy my game"
         message = QMessageBox (windowTitle = "Sudoku Ruls 📜" , text = text)
         message.exec_ ()
 
 
     def options ( self ) : 
-        text = "✔ You can change the difficulty of the game.\n\n✔ You can solve your own Sudoku by writing its numbers in a text file a use \
+        text = "✔ You can solve your own Sudoku by writing its numbers in a text file a use \
 'Open File' section in 'Game' menue.\nnote : You must write '0' instead of empty blocks😉"
         message = QMessageBox (windowTitle = "Options ..." , text = text)
         message.exec_ ()
@@ -81,13 +84,62 @@ tip :Each number in the 3×3 block, vertical column or horizontal row can be use
 
     def validation ( self , i , j , text) : 
         if text not in ["1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9"] :
+            self.cells[i][j].setStyleSheet ("background-color: rgb(0, 255, 255); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
             self.cells[i][j].setText ("")
         
         else :
-            self.check ()
+            self.check (i , j , text)
 
 
-    def check ( self ) : ...
+    def check ( self , i , j , text) :
+        for colomn in range (9) :
+            if colomn != j :
+                if text == self.cells[i][colomn].text() :
+                    self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
+                    self.mistake += 1
+                    self.ui.mistakes.setText (str (self.mistake))
+                    break
+                
+                else :
+                    pass
+        
+        for row in range (9) :
+            if row != i :
+                if text == self.cells[row][j].text() :
+                    self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
+                    self.mistake += 1
+                    self.ui.mistakes.setText (str (self.mistake))
+                    break
+
+        if i % 3 == 0 :
+            rows = [i + 1 , i + 2]
+        
+        elif i % 3 == 1 :
+            rows = [i - 1 , i + 1]
+        
+        else :
+            rows = [i - 2 , i - 1]
+        
+
+        if j % 3 == 0 :
+            colomns = [j + 1 , j + 2]
+        
+        elif j % 3 == 1 :
+            colomns = [j - 1 , j + 1]
+        
+        else :
+            colomns = [j - 2 , j - 1]
+        
+
+        for row in rows :
+            for colomn in colomns :
+                if text == self.cells[row][colomn].text() :
+                    self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
+                    self.mistake += 1
+                    self.ui.mistakes.setText (str (self.mistake))
+                    break
+
+
 
 if __name__ == "__main__" :
     app = QApplication ( sys.argv )

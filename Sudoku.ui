@@ -140,7 +140,6 @@ border-bottom-left-radius: 5px;</string>
     </property>
     <addaction name="menue_new"/>
     <addaction name="menue_file"/>
-    <addaction name="menue_difficulty"/>
    </widget>
    <widget class="QMenu" name="menuabout">
     <property name="title">

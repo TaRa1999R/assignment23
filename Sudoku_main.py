@@ -19,12 +19,14 @@ class Mainwindow ( QMainWindow ) :
         self.score = 0
         self.mistake = 0
         self.ui.darkmode.setChecked (True)
+    
         
         self.new_game ()
         self.ui.menue_new.triggered.connect (self.new_game)
         self.ui.menue_file.triggered.connect (self.open_file)
         self.ui.menue_rule.triggered.connect (self.rules)
         self.ui.menue_option.triggered.connect (self.options)
+        self.ui.darkmode.clicked.connect (self.change_mode)
     
     
     def new_game ( self ) :
@@ -46,25 +48,33 @@ class Mainwindow ( QMainWindow ) :
 
     
     def open_file ( self ) :
-        path = QFileDialog.getOpenFileName (self , "Open File")[0]
-        f = open (path , "r")
-        big_text = f.read ()
-        rows = big_text.split ("\n")
-        puzzle = [[ None for i in range (9)] for j in range (9)]
-        for i in range (len (rows)) :
-            cell = rows[i].split (" ")
-            for j in range (len (cell)) :
-                puzzle[i][j] = int (cell[j])
+        try :
+            path = QFileDialog.getOpenFileName (self , "Open File")[0]
+            f = open (path , "r")
+            big_text = f.read ()
+            rows = big_text.split ("\n")
+            puzzle = [[ None for i in range (9)] for j in range (9)]
+            for i in range (len (rows)) :
+                cell = rows[i].split (" ")
+                for j in range (len (cell)) :
+                    puzzle[i][j] = int (cell[j])
 
-        for i in range (9) :
-            for j in range (9) :
-                self.cells[i][j].setReadOnly (False)
-                if puzzle[i][j] != 0 :
-                    self.cells[i][j].setText (str (puzzle[i][j]))
-                    self.cells[i][j].setReadOnly (True)
+            for i in range (9) :
+                for j in range (9) :
+                    self.cells[i][j].setReadOnly (False)
+                    if puzzle[i][j] != 0 :
+                        self.cells[i][j].setText (str (puzzle[i][j]))
+                        self.cells[i][j].setReadOnly (True)
                 
-                else :
-                    self.cells[i][j].setText ("")
+                    else :
+                        self.cells[i][j].setText ("")
+        
+        except :
+            txt = "Sorry the an error has been occured.😕\nPlease check option section in about menue and try again later.⏳\n\
+Untill then you cant do another sudoku puzzle.😇😕⏳"
+            message = QMessageBox (windowTitle = "⚠ Error ..." , text = txt)
+            message.exec_ ()
+            self.new_game ()
 
 
     def rules ( self ) :
@@ -78,23 +88,46 @@ tip :Each number in the 3*3 block, vertical column or horizontal row can be used
 
     def options ( self ) : 
         txt = "✔ You can solve your own Sudoku by writing its numbers in a text file a use \
-'Open File' section in 'Game' menue.\nnote : You must write '0' instead of empty blocks😉"
+'Open File' section in 'Game' menue.\nnote : You must write '0' instead of empty blocks😉\n\n✔ You can use 'Solve' section in 'Game' menue to \
+too see the completed sudoku puzzle.\nnote : You can only use this option for the game puzzle not the one you upload them😏\n\n✔ Default game mode \
+is 'Dark Mode' , but you can also turn it off and put the game in 'Light Mode'."
         message = QMessageBox (windowTitle = "Options ..." , text = txt)
         message.exec_ ()
+
+    def change_mode ( self ) :
+        if self.ui.darkmode.isChecked () == True :
+            self.ui.centralwidget.setStyleSheet("background-color: rgb(129, 129, 129);")
+            for i in range (9) :
+                for j in range (9) :
+                    self.cells[i][j].setStyleSheet("background-color: rgb(0, 255, 255); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
+        
+        else :
+            self.ui.centralwidget.setStyleSheet("background-color: rgb(25, 255, 255);")
+            for i in range (9) :
+                for j in range (9) :
+                    self.cells[i][j].setStyleSheet("background-color: rgb(253, 202, 255); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
+
+
+    def solve ( self ) :
+        ...
 
 
     def validation ( self , i , j , text) : 
         if text not in ["1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9"] :
-            self.cells[i][j].setStyleSheet ("background-color: rgb(0, 255, 255); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
-            self.cells[i][j].setText ("")
-        
-        else :
+            if self.ui.darkmode.isChecked () == True :
+                self.cells[i][j].setStyleSheet ("background-color: rgb(0, 255, 255); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
+                self.cells[i][j].setText ("")
+            
+            else :
+                self.cells[i][j].setStyleSheet ("background-color: rgb(253, 202, 255); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
+                self.cells[i][j].setText ("") 
+
+        else :    
             self.check (i , j , text)
 
 
     def check ( self , i , j , text) :
         state = 0
-
         # CHECK  IN A ROW
         if state == 0 :
             for colomn in range (9) :

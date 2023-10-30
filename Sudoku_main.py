@@ -16,10 +16,7 @@ class Mainwindow ( QMainWindow ) :
         self.ui.setupUi (self)
 
         self.cells = [[None for i in range (9)] for j in range (9)]
-        self.score = 0
-        self.mistake = 0
-        self.ui.darkmode.setChecked (True)
-    
+        self.ui.darkmode.setChecked (True)    
         
         self.new_game ()
         self.ui.menue_new.triggered.connect (self.new_game)
@@ -31,6 +28,8 @@ class Mainwindow ( QMainWindow ) :
     
     
     def new_game ( self ) :
+        self.mode = "CPU"
+        self.mistake = 0
         puzzle = Sudoku (3 , seed = random.randint (1 , 1000)).difficulty (0.5)
         self.solution = puzzle.solve ()
         for i in range (9) :
@@ -51,6 +50,8 @@ class Mainwindow ( QMainWindow ) :
     
     def open_file ( self ) :
         try :
+            self.mode = "file"
+            self.mistake = 0
             path = QFileDialog.getOpenFileName (self , "Open File")[0]
             f = open (path , "r")
             big_text = f.read ()
@@ -83,7 +84,9 @@ Untill then you cant do another sudoku puzzle.😇😕⏳"
         txt = "What are the 3 rules of Sudoku?🤔\n\nThe rules for sudoku are simple :\n\
     1. Each 3*3 block can only contain numbers from 1 to 9.\n    2.Each vertical column can only contain numbers from 1 to 9.\n\
     3.Each horizontal row can only contain numbers from 1 to 9.\n\n\
-tip :Each number in the 3*3 block, vertical column or horizontal row can be used only once🤐😅\n\n I hope you enjoy my game"
+tip :Each number in the 3*3 block, vertical column or horizontal row can be used only once🤐😅\nnote: In your own\
+ sudoku puzzle (when you upload file) you can make 5️ mistakes, while in computer puzzles you can only make 3️ mistakes.\
+\n\nI hope you enjoy my game.🤭"
         message = QMessageBox (windowTitle = "Sudoku Ruls 📜" , text = txt)
         message.exec_ ()
 
@@ -131,83 +134,113 @@ is 'Dark Mode' , but you can also turn it off and put the game in 'Light Mode'."
 
 
     def check ( self , i , j , text) :
-        state = 0
-        # CHECK  IN A ROW
-        if state == 0 :
-            for colomn in range (9) :
-                if colomn != j :
-                    if text == self.cells[i][colomn].text() :
-                        self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
-                        self.mistake += 1
-                        self.ui.mistakes.setText (str (self.mistake))
-                        print("ro", self.mistake)
-                        break
-                
-            else :
-                state = 1
+        if self.mode == "file" :
+            print ("file")
+            state = 0
+            # CHECK  IN A ROW
+            if state == 0 :
+                for colomn in range (9) :
+                    if colomn != j :
+                        if text == self.cells[i][colomn].text() :
+                            self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
+                            self.mistake += 1
+                            self.ui.mistakes.setText (str (self.mistake))
+                            print("ro", self.mistake)
+                            break
+                        
+                else :
+                    state = 1
+
+            # CHECK IN A COLOMN
+            if state == 1 :
+                for row in range (9) :
+                    if row != i :
+                        if text == self.cells[row][j].text() :
+                            self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
+                            self.mistake += 1
+                            self.ui.mistakes.setText (str (self.mistake))
+                            print("col", self.mistake)
+                            break
+
+                else :
+                    state = 2
+
+            # CHECK IN 3*3 BLOCK
+            if state == 2 :
+                if i % 3 == 0 :
+                    rows = [i + 1 , i + 2]
+
+                elif i % 3 == 1 :
+                    rows = [i - 1 , i + 1]
+
+                else :
+                    rows = [i - 2 , i - 1]
+
+                if j % 3 == 0 :
+                    colomns = [j + 1 , j + 2]
+
+                elif j % 3 == 1 :
+                    colomns = [j - 1 , j + 1]
+
+                else :
+                    colomns = [j - 2 , j - 1]
+
+                for row in rows :
+                    for colomn in colomns :
+                        if text == self.cells[row][colomn].text() :
+                            self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
+                            self.mistake += 1
+                            self.ui.mistakes.setText (str (self.mistake))
+                            print("bl", self.mistake)
+                            break
         
-        # CHECK IN A COLOMN
-        if state == 1 :
+            # CHECK WIN
+            check = 0
             for row in range (9) :
-                if row != i :
-                    if text == self.cells[row][j].text() :
-                        self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
-                        self.mistake += 1
-                        self.ui.mistakes.setText (str (self.mistake))
-                        print("col", self.mistake)
-                        break
+                for colomn in range (9) :
+                    if self.cells[row][colomn].text() != ""  and self.mistake < 5 :
+                        check += 1
+
+            if check == 81 :
+                txt = "🎉🎉 You WIN 🎉🎉"
+                message = QMessageBox (windowTitle = "Congratulation... 🥳" , text = txt)
+                message.exec_ ()
+                self.new_game ()
+        
+            # CHECK LOOS
+            if self.mistake == 5 :
+                txt = "💀💀 You LOOSE 💀💀"
+                message = QMessageBox (windowTitle = "Congratulation... 🥴" , text = txt)
+                message.exec_ ()
+                self.new_game ()
+        
+        elif self.mode == "CPU" :
+            if text != str (self.solution.board[i][j]) :
+                self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
+                self.mistake += 1
+                self.ui.mistakes.setText (str (self.mistake))
 
             else :
-                state = 2
+                self.cells[i][j].setReadOnly (True)
 
-        # CHECK IN 3*3 BLOCK
-        if state == 2 :
-            if i % 3 == 0 :
-                rows = [i + 1 , i + 2]
-        
-            elif i % 3 == 1 :
-                rows = [i - 1 , i + 1]
-        
-            else :
-                rows = [i - 2 , i - 1]
-        
-            if j % 3 == 0 :
-                colomns = [j + 1 , j + 2]
-        
-            elif j % 3 == 1 :
-                colomns = [j - 1 , j + 1]
-        
-            else :
-                colomns = [j - 2 , j - 1]
-        
-            for row in rows :
-                for colomn in colomns :
-                    if text == self.cells[row][colomn].text() :
-                        self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
-                        self.mistake += 1
-                        self.ui.mistakes.setText (str (self.mistake))
-                        print("bl", self.mistake)
+            for i in range (9) :
+                for j in range (9) :
+                    if self.cells[i][j].text() != str (self.solution.board[i][j]) :
                         break
-        
-        # CHECK WIN
-        check = 0
-        for row in range (9) :
-            for colomn in range (9) :
-                if self.cells[row][colomn].text() != ""  and self.mistake < 3 :
-                    check += 1
-        
-        if check == 81 :
-            txt = "🎉🎉 You WIN 🎉🎉"
-            message = QMessageBox (windowTitle = "Congratulation... 🥳" , text = txt)
-            message.exec_ ()
-            self.new_game ()
-        
-        # CHECK LOOS
-        if self.mistake == 3 :
-            txt = "💀💀 You LOOSE 💀💀"
-            message = QMessageBox (windowTitle = "Congratulation... 🥴" , text = txt)
-            message.exec_ ()
-            self.new_game ()
+
+                else :
+                    txt = "🎉🎉 You WIN 🎉🎉"
+                    message = QMessageBox (windowTitle = "Congratulation... 🥳" , text = txt)
+                    message.exec_ ()
+                    self.new_game ()
+            
+            if self.mistake == 3 :
+                txt = "💀💀 You LOOSE 💀💀"
+                message = QMessageBox (windowTitle = "Congratulation... 🥴" , text = txt)
+                message.exec_ ()
+                self.new_game ()
+
+
 
 
 if __name__ == "__main__" :

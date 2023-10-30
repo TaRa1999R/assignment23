@@ -18,6 +18,7 @@ class Mainwindow ( QMainWindow ) :
         self.cells = [[None for i in range (9)] for j in range (9)]
         self.score = 0
         self.mistake = 0
+        self.ui.darkmode.setChecked (True)
         
         self.new_game ()
         self.ui.menue_new.triggered.connect (self.new_game)
@@ -96,16 +97,17 @@ tip :Each number in the 3*3 block, vertical column or horizontal row can be used
 
         # CHECK  IN A ROW
         if state == 0 :
-         for colomn in range (9) :
+            for colomn in range (9) :
                 if colomn != j :
                     if text == self.cells[i][colomn].text() :
                         self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
                         self.mistake += 1
                         self.ui.mistakes.setText (str (self.mistake))
+                        print("ro", self.mistake)
                         break
                 
-                    else :
-                        state = 1
+            else :
+                state = 1
         
         # CHECK IN A COLOMN
         if state == 1 :
@@ -115,10 +117,11 @@ tip :Each number in the 3*3 block, vertical column or horizontal row can be used
                         self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
                         self.mistake += 1
                         self.ui.mistakes.setText (str (self.mistake))
+                        print("col", self.mistake)
                         break
 
-                    else :
-                        state = 2
+            else :
+                state = 2
 
         # CHECK IN 3*3 BLOCK
         if state == 2 :
@@ -146,6 +149,7 @@ tip :Each number in the 3*3 block, vertical column or horizontal row can be used
                         self.cells[i][j].setStyleSheet ("background-color: rgb(255, 85, 127); border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;")
                         self.mistake += 1
                         self.ui.mistakes.setText (str (self.mistake))
+                        print("bl", self.mistake)
                         break
         
         # CHECK WIN

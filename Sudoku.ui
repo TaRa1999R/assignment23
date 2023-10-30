@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>499</width>
+    <width>491</width>
     <height>610</height>
    </rect>
   </property>
@@ -35,7 +35,7 @@
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true">color: rgb(255, 85, 127);
+         <string notr="true">color: rgb(118, 0, 0);
 border-top-right-radius: 5px;
 border-top-left-radius: 5px;
 border-bottom-right-radius: 5px;
@@ -48,6 +48,12 @@ border-bottom-left-radius: 5px;</string>
       </item>
       <item>
        <widget class="QLineEdit" name="mistakes">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="font">
          <font>
           <pointsize>13</pointsize>
@@ -55,7 +61,7 @@ border-bottom-left-radius: 5px;</string>
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true">color: rgb(255, 85, 127);
+         <string notr="true">color: rgb(118, 0, 0);
 border-top-right-radius: 5px;
 border-top-left-radius: 5px;
 border-bottom-right-radius: 5px;
@@ -84,37 +90,21 @@ border-bottom-left-radius: 5px;</string>
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true">color: rgb(0, 255, 127);
+         <string notr="true">color: rgb(0, 0, 127);
 border-top-right-radius: 5px;
 border-top-left-radius: 5px;
 border-bottom-right-radius: 5px;
 border-bottom-left-radius: 5px;</string>
         </property>
         <property name="text">
-         <string>Score :</string>
+         <string>DarkMode :</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="score">
-        <property name="font">
-         <font>
-          <pointsize>13</pointsize>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(0, 255, 127);
-border-top-right-radius: 5px;
-border-top-left-radius: 5px;
-border-bottom-right-radius: 5px;
-border-bottom-left-radius: 5px;</string>
-        </property>
-        <property name="inputMask">
-         <string/>
-        </property>
+       <widget class="QRadioButton" name="darkmode">
         <property name="text">
-         <string>0</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -130,7 +120,7 @@ border-bottom-left-radius: 5px;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>499</width>
+     <width>491</width>
      <height>22</height>
     </rect>
    </property>
@@ -140,6 +130,7 @@ border-bottom-left-radius: 5px;</string>
     </property>
     <addaction name="menue_new"/>
     <addaction name="menue_file"/>
+    <addaction name="menue_solve"/>
    </widget>
    <widget class="QMenu" name="menuabout">
     <property name="title">
@@ -175,6 +166,11 @@ border-bottom-left-radius: 5px;</string>
   <action name="menue_option">
    <property name="text">
     <string>Options</string>
+   </property>
+  </action>
+  <action name="menue_solve">
+   <property name="text">
+    <string>Solve</string>
    </property>
   </action>
  </widget>

@@ -18,13 +18,13 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QLabel,
     QLineEdit, QMainWindow, QMenu, QMenuBar,
-    QSizePolicy, QStatusBar, QWidget)
+    QRadioButton, QSizePolicy, QStatusBar, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(499, 610)
+        MainWindow.resize(491, 610)
         MainWindow.setStyleSheet(u"background-color: rgb(129, 129, 129);")
         self.menue_new = QAction(MainWindow)
         self.menue_new.setObjectName(u"menue_new")
@@ -36,6 +36,8 @@ class Ui_MainWindow(object):
         self.menue_difficulty.setObjectName(u"menue_difficulty")
         self.menue_option = QAction(MainWindow)
         self.menue_option.setObjectName(u"menue_option")
+        self.menue_solve = QAction(MainWindow)
+        self.menue_solve.setObjectName(u"menue_solve")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout_2 = QGridLayout(self.centralwidget)
@@ -53,7 +55,7 @@ class Ui_MainWindow(object):
         font.setPointSize(13)
         font.setBold(True)
         self.label.setFont(font)
-        self.label.setStyleSheet(u"color: rgb(255, 85, 127);\n"
+        self.label.setStyleSheet(u"color: rgb(118, 0, 0);\n"
 "border-top-right-radius: 5px;\n"
 "border-top-left-radius: 5px;\n"
 "border-bottom-right-radius: 5px;\n"
@@ -63,8 +65,13 @@ class Ui_MainWindow(object):
 
         self.mistakes = QLineEdit(self.centralwidget)
         self.mistakes.setObjectName(u"mistakes")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.mistakes.sizePolicy().hasHeightForWidth())
+        self.mistakes.setSizePolicy(sizePolicy1)
         self.mistakes.setFont(font)
-        self.mistakes.setStyleSheet(u"color: rgb(255, 85, 127);\n"
+        self.mistakes.setStyleSheet(u"color: rgb(118, 0, 0);\n"
 "border-top-right-radius: 5px;\n"
 "border-top-left-radius: 5px;\n"
 "border-bottom-right-radius: 5px;\n"
@@ -77,7 +84,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
         self.label_2.setSizePolicy(sizePolicy)
         self.label_2.setFont(font)
-        self.label_2.setStyleSheet(u"color: rgb(0, 255, 127);\n"
+        self.label_2.setStyleSheet(u"color: rgb(0, 0, 127);\n"
 "border-top-right-radius: 5px;\n"
 "border-top-left-radius: 5px;\n"
 "border-bottom-right-radius: 5px;\n"
@@ -85,16 +92,10 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addWidget(self.label_2)
 
-        self.score = QLineEdit(self.centralwidget)
-        self.score.setObjectName(u"score")
-        self.score.setFont(font)
-        self.score.setStyleSheet(u"color: rgb(0, 255, 127);\n"
-"border-top-right-radius: 5px;\n"
-"border-top-left-radius: 5px;\n"
-"border-bottom-right-radius: 5px;\n"
-"border-bottom-left-radius: 5px;")
+        self.darkmode = QRadioButton(self.centralwidget)
+        self.darkmode.setObjectName(u"darkmode")
 
-        self.horizontalLayout.addWidget(self.score)
+        self.horizontalLayout.addWidget(self.darkmode)
 
 
         self.gridLayout_2.addLayout(self.horizontalLayout, 0, 0, 1, 1)
@@ -107,7 +108,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 499, 22))
+        self.menubar.setGeometry(QRect(0, 0, 491, 22))
         self.menuGame = QMenu(self.menubar)
         self.menuGame.setObjectName(u"menuGame")
         self.menuabout = QMenu(self.menubar)
@@ -121,6 +122,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuabout.menuAction())
         self.menuGame.addAction(self.menue_new)
         self.menuGame.addAction(self.menue_file)
+        self.menuGame.addAction(self.menue_solve)
         self.menuabout.addAction(self.menue_rule)
         self.menuabout.addAction(self.menue_option)
 
@@ -136,12 +138,12 @@ class Ui_MainWindow(object):
         self.menue_rule.setText(QCoreApplication.translate("MainWindow", u"Rules", None))
         self.menue_difficulty.setText(QCoreApplication.translate("MainWindow", u"Difficulty", None))
         self.menue_option.setText(QCoreApplication.translate("MainWindow", u"Options", None))
+        self.menue_solve.setText(QCoreApplication.translate("MainWindow", u"Solve", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Mistakes :", None))
         self.mistakes.setInputMask("")
         self.mistakes.setText(QCoreApplication.translate("MainWindow", u"0", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Score :", None))
-        self.score.setInputMask("")
-        self.score.setText(QCoreApplication.translate("MainWindow", u"0", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"DarkMode :", None))
+        self.darkmode.setText("")
         self.menuGame.setTitle(QCoreApplication.translate("MainWindow", u"Game", None))
         self.menuabout.setTitle(QCoreApplication.translate("MainWindow", u"about", None))
     # retranslateUi

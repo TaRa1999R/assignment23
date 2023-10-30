@@ -27,10 +27,12 @@ class Mainwindow ( QMainWindow ) :
         self.ui.menue_rule.triggered.connect (self.rules)
         self.ui.menue_option.triggered.connect (self.options)
         self.ui.darkmode.clicked.connect (self.change_mode)
+        self.ui.menue_solve.triggered.connect (self.solve)
     
     
     def new_game ( self ) :
         puzzle = Sudoku (3 , seed = random.randint (1 , 1000)).difficulty (0.5)
+        self.solution = puzzle.solve ()
         for i in range (9) :
             for j in range (9) :
                 new_cell = QLineEdit ()
@@ -109,7 +111,9 @@ is 'Dark Mode' , but you can also turn it off and put the game in 'Light Mode'."
 
 
     def solve ( self ) :
-        ...
+        for i in range (9) :
+            for j in range (9) :
+                self.cells[i][j].setText (str (self.solution.board[i][j]))
 
 
     def validation ( self , i , j , text) : 

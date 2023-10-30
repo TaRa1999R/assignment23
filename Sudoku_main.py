@@ -92,6 +92,7 @@ tip :Each number in the 3*3 block, vertical column or horizontal row can be used
 
 
     def check ( self , i , j , text) :
+        # CHECK  IN A ROW
         for colomn in range (9) :
             if colomn != j :
                 if text == self.cells[i][colomn].text() :
@@ -103,6 +104,7 @@ tip :Each number in the 3*3 block, vertical column or horizontal row can be used
                 else :
                     pass
         
+        # CHECK IN A COLOMN
         for row in range (9) :
             if row != i :
                 if text == self.cells[row][j].text() :
@@ -111,6 +113,7 @@ tip :Each number in the 3*3 block, vertical column or horizontal row can be used
                     self.ui.mistakes.setText (str (self.mistake))
                     break
 
+        # CHECK IN 3*3 BLOCK
         if i % 3 == 0 :
             rows = [i + 1 , i + 2]
         
@@ -120,7 +123,6 @@ tip :Each number in the 3*3 block, vertical column or horizontal row can be used
         else :
             rows = [i - 2 , i - 1]
         
-
         if j % 3 == 0 :
             colomns = [j + 1 , j + 2]
         
@@ -130,7 +132,6 @@ tip :Each number in the 3*3 block, vertical column or horizontal row can be used
         else :
             colomns = [j - 2 , j - 1]
         
-
         for row in rows :
             for colomn in colomns :
                 if text == self.cells[row][colomn].text() :
@@ -138,6 +139,10 @@ tip :Each number in the 3*3 block, vertical column or horizontal row can be used
                     self.mistake += 1
                     self.ui.mistakes.setText (str (self.mistake))
                     break
+        
+        # CHECK FULL GAME
+        for row in range (9) :
+            
 
 
 
